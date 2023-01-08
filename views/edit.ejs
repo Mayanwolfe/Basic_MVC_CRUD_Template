@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Item</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <section>
+        <h1><h1>This is the Edit Page!</h1></h1>
+        <section>
+            <ul>
+                <% itemList.forEach(item => { %>
+                    <% if (item._id==idItem) { %>
+                        <li>
+                            <form action="/edit/update/<%= item._id %>" method="POST">
+                                <label for="textinput">Input Text</label>
+                                <input type="text" value="<%= item.textinput %>" name="textinput">
+                                <br>
+                                <label for="numinput">Input Number</label>
+                                <input type="number" value="<%= item.numinput %>" name="numinput">
+                                <br>
+                                <button type="submit" class="confirm">Confirm</button>
+                                <a href="/" class="cancel">Cancel</a>
+                            </form>
+                        </li>
+                        <% } else { %>
+                            <li>
+                                <div>
+                                    <%= item.textinput %>
+                                </div>
+                                <div>
+                                    <%= item.numinput %>
+                                </div>
+                                <a href="/edit/<%= item._id %>">Edit</a>
+                                <a href="/edit/remove/<%= item._id %>" class="remove">Cancel</a>
+                            </li>
+                            <% } %>
+                                <% }) %>
+            </ul>
+        </section>
+    </section>
+</body>
+</html>
