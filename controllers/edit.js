@@ -1,32 +1,40 @@
 const ItemList = require('../models/ItemList')
 
 module.exports = {
-    getEdit: (req, res) => {
-        //console.log(req)
-        const id = req.params.id;
+    getEdit: async (req,res) =>  {
+        const id = req.params.id
         console.log(id)
-        ItemList.find({}, (err, items) => {
-             res.render("edit.ejs", { itemList: items, idItem: id });
-        });
-     },
-    deleteTask: (req, res) => {
-                 const id = req.params.id;
-                 ItemList.findByIdAndRemove(id, err => {
-                     if (err) return res.send(500, err);
-                     res.redirect('back');
-                 })
+        try {
+            const items = await ItemList.find()
+            res.render("edit.ejs", {itemList: items, idItem: id})
+        } catch (err) {
+            if (err) return res.status(500).send(err)
+        }
     },
-    updateTask: (req, res) => {
-                 const id = req.params.id;
-                 ItemList.findByIdAndUpdate(
-                     id,
-                     {
-                        textinput: req.body.textinput,
-                        numinput: req.body.numinput
-                     },
-                err => {
-                         if (err) return res.status(500).send(err);
-                         res.redirect('/');
-                     })
+    deleteItem: async (req,res) => {
+        const id = req.params.id
+        try {
+            const result = await ItemList.findByIdAndDelete(id)
+            console.log(result)
+            res.redirect('back')
+        } catch (err) {
+            if (err) return res.status(500).send(err)
+        } 
+    },
+    updateItem: async (req,res) => {
+        const id = req.params.id
+        try {
+            await ItemList.findByIdAndUpdate(
+               id,
+               {
+                textinput: req.body.textinput,
+                numinput: req.body.numinput
+                },
+            )
+            res.redirect('/');
+        } catch (err) {
+            if (err) return res.status(500).send(err)
+            res.redirect('/');
+        } 
     }
 }
